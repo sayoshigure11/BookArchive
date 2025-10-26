@@ -1,3 +1,4 @@
+// 読み取った後にちゃんとスキャナーが解除される。Html5QrcodeScannerインスタンスなら大丈夫！
 "use client";
 
 import { useEffect, useRef, useState } from "react";

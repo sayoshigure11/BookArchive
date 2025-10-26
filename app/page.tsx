@@ -1,3 +1,4 @@
+// 読み取った後にスキャナーが解除されない。Html5Qrcodeインスタンスはだめみたい。clearメソッドでもダメだった。というか手動解除すらできなくなってた。
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -49,6 +50,7 @@ export default function BookScanner() {
     if (scannerRef.current && isScanning) {
       try {
         await scannerRef.current.stop();
+        // await scannerRef.current.clear();
         setIsScanning(false);
       } catch (err) {
         console.error("スキャナーの停止に失敗しました", err);
