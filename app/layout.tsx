@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { BookProvider } from "@/hooks/bookProvider";
+import { Tab } from "@/components/tab";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,7 +29,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <BookProvider>
+          <div className="mb-12">{children}</div>
+        </BookProvider>
+        <div className="fixed bottom-0 z-50 w-full">
+          <Tab />
+        </div>
       </body>
     </html>
   );
