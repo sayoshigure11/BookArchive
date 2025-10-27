@@ -2,7 +2,7 @@
 // components/BookRegistrationModal.tsx
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import Image from "next/image";
 import { MapPin, Plus, Star, Trash2, X } from "lucide-react";
 import {
@@ -18,6 +18,7 @@ import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { useBooks } from "@/hooks/bookProvider";
 import { COMMON_LOCATIONS, COMMON_PRICES } from "@/lib/common-locations";
+import { BookDetailModal } from "./BookDetailModal";
 
 // const COMMON_LOCATIONS = ["Amazon", "BookOff", "楽天ブックス", "紀伊國屋"];
 // const COMMON_PRICES = [110, 220, 500, 1000, 2000];
@@ -42,7 +43,7 @@ type Props = {
 };
 
 export function BookRegistrationModal({ visible, onClose, bookData }: Props) {
-  const { addBook } = useBooks();
+  const { addBook, allBooks } = useBooks();
   const [expectation, setExpectation] = useState(3);
   const [purchased, setPurchased] = useState(false);
   const [locations, setLocations] = useState<BookLocation[]>([]);
@@ -121,6 +122,24 @@ export function BookRegistrationModal({ visible, onClose, bookData }: Props) {
     });
     onClose();
   };
+
+  // スキャンした本が登録済みだった場合は代わりにその本の詳細モーダルを開く。
+  const bookCheck = useMemo(() => {
+    return allBooks.some((book) => book.isbn === bookData.isbn);
+  }, [bookData, allBooks]);
+
+  if (bookCheck) {
+    const existingBookData =
+      allBooks.find((book) => book.isbn === bookData.isbn) ?? null;
+    return (
+      <BookDetailModal
+        visible={visible}
+        book={existingBookData}
+        onOpenChange={onClose}
+        existing={true}
+      />
+    );
+  }
 
   return (
     <Dialog open={visible} onOpenChange={onClose}>

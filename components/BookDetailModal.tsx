@@ -14,12 +14,14 @@ type BookDetailModalProps = {
   visible: boolean;
   book: Book | null;
   onOpenChange: (open: boolean) => void;
+  existing?: boolean;
 };
 
 export function BookDetailModal({
   visible,
   book,
   onOpenChange,
+  existing,
 }: BookDetailModalProps) {
   const { updateBook, deleteBook } = useBooks();
 
@@ -56,7 +58,7 @@ export function BookDetailModal({
             </button>
             <SheetHeader>
               <SheetTitle className="text-lg font-semibold">
-                本の詳細
+                本の詳細{existing ? `（登録済み）` : ""}
               </SheetTitle>
             </SheetHeader>
           </div>
