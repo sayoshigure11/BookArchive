@@ -20,7 +20,8 @@
     ],
     "paths": {
       "@/*": ["./*"]
-    }
+    },
+    "types": ["@types/node"]
   },
   "include": [
     "next-env.d.ts",
@@ -29,6 +30,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "next.config.mjs"  ],
   "exclude": ["node_modules"]
 }
