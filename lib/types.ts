@@ -21,4 +21,5 @@ export type FilterOptions = {
   sortBy: 'title' | 'author' | 'expectation' | 'date';
   showPurchased: 'all' | 'purchased' | 'unpurchased';
   selectedLocations: string[];
+  selectedPrices: number[];
 };

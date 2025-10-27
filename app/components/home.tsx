@@ -13,7 +13,8 @@ import { BookDetailModal } from "@/components/BookDetailModal";
 import { useBooks } from "@/hooks/bookProvider";
 
 export default function BookListPage() {
-  const { books, allBooks, filters, setFilters, allLocations } = useBooks();
+  const { books, allBooks, filters, setFilters, allLocations, allPrices } =
+    useBooks();
   const [showFilter, setShowFilter] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
 
@@ -34,6 +35,7 @@ export default function BookListPage() {
   const activeFilterCount =
     (filters.showPurchased !== "all" ? 1 : 0) +
     filters.selectedLocations.length +
+    filters.selectedPrices.length +
     (filters.sortBy !== "date" ? 1 : 0);
 
   return (
@@ -126,6 +128,7 @@ export default function BookListPage() {
         visible={showFilter}
         filters={filters}
         allLocations={allLocations}
+        allPrices={allPrices}
         // onClose={() => setShowFilter(false)}
         onOpenChange={() => setShowFilter(false)}
         onApply={setFilters}

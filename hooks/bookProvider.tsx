@@ -118,6 +118,7 @@ const initialFilters: FilterOptions = {
   sortBy: "date",
   showPurchased: "all",
   selectedLocations: [],
+  selectedPrices: [],
 };
 
 // ------------------------------------------------
@@ -133,6 +134,7 @@ type BookContextType = {
   updateBook: (id: string, updates: Partial<Book>) => void;
   deleteBook: (id: string) => void;
   allLocations: string[];
+  allPrices: number[];
 };
 
 const BookContext = createContext<BookContextType | undefined>(undefined);
@@ -230,6 +232,13 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
       );
     }
 
+    if (filters.selectedPrices.length > 0) {
+      const setFilters = new Set(filters.selectedPrices);
+      result = result.filter((book) =>
+        book.locations.some((loc) => loc.prices.some((l) => setFilters.has(l)))
+      );
+    }
+
     result.sort((a, b) => {
       switch (filters.sortBy) {
         case "title":
@@ -255,6 +264,14 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
     return Array.from(locations).sort();
   }, [books]);
 
+  const allPrices = useMemo(() => {
+    const prices = new Set<number>();
+    books.forEach((book) =>
+      book.locations.forEach((loc) => loc.prices.forEach((l) => prices.add(l)))
+    );
+    return Array.from(prices).sort();
+  }, [books]);
+
   const value = useMemo(
     () => ({
       books: filteredBooks,
@@ -266,6 +283,7 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
       updateBook,
       deleteBook,
       allLocations,
+      allPrices,
     }),
     [
       filteredBooks,
@@ -276,6 +294,7 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
       updateBook,
       deleteBook,
       allLocations,
+      allPrices,
     ]
   );
 

@@ -17,6 +17,7 @@ type FilterBottomSheetProps = {
   visible: boolean;
   filters: FilterOptions;
   allLocations: string[];
+  allPrices: number[];
   onOpenChange: (open: boolean) => void;
   onApply: (filters: FilterOptions) => void;
 };
@@ -25,6 +26,7 @@ export function FilterBottomSheet({
   visible,
   filters,
   allLocations,
+  allPrices,
   onOpenChange,
   onApply,
 }: FilterBottomSheetProps) {
@@ -49,12 +51,23 @@ export function FilterBottomSheet({
     [filters, onApply]
   );
 
+  const handlePriceToggle = useCallback(
+    (price: number) => {
+      const selected = filters.selectedPrices.includes(price)
+        ? filters.selectedPrices.filter((l) => l !== price)
+        : [...filters.selectedPrices, price];
+      onApply({ ...filters, selectedPrices: selected });
+    },
+    [filters, onApply]
+  );
+
   const handleReset = useCallback(() => {
     onApply({
       searchQuery: filters.searchQuery,
       sortBy: "date",
       showPurchased: "all",
       selectedLocations: [],
+      selectedPrices: [],
     });
   }, [filters.searchQuery, onApply]);
 
@@ -178,6 +191,31 @@ export function FilterBottomSheet({
                     <button
                       key={loc}
                       onClick={() => handleLocationToggle(loc)}
+                      className={`rounded-full px-4 py-2 text-sm transition ${
+                        selected
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-muted border"
+                      }`}
+                    >
+                      {loc}
+                    </button>
+                  );
+                })}
+              </div>
+            </section>
+          )}
+
+          {/* Prices */}
+          {allPrices.length > 0 && (
+            <section>
+              <h3 className="mb-3 text-sm font-semibold">価格</h3>
+              <div className="flex flex-wrap gap-2">
+                {allPrices.map((loc) => {
+                  const selected = filters.selectedPrices.includes(loc);
+                  return (
+                    <button
+                      key={loc}
+                      onClick={() => handlePriceToggle(loc)}
                       className={`rounded-full px-4 py-2 text-sm transition ${
                         selected
                           ? "bg-primary text-primary-foreground"
