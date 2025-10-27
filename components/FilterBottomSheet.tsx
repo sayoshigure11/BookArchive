@@ -10,7 +10,6 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { FilterOptions } from "@/lib/types";
 
 type FilterBottomSheetProps = {
@@ -110,24 +109,6 @@ export function FilterBottomSheet({
             <X size={18} />
           </Button>
         </div>
-        {/* <SheetHeader className="flex items-center justify-between px-4">
-          <div>
-            <SheetTitle className="text-lg font-semibold">
-              フィルター
-            </SheetTitle>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => onOpenChange(false)}
-              aria-label="Close"
-            >
-              <X size={18} />
-            </Button>
-          </div>
-        </SheetHeader> */}
 
         <div className="px-4 py-4 space-y-6">
           {/* Sort */}

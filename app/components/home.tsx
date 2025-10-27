@@ -18,8 +18,6 @@ export default function BookListPage() {
   const [showFilter, setShowFilter] = useState(false);
   const [selectedBookId, setSelectedBookId] = useState<string | null>(null);
 
-  const [openModal, setOpenModal] = useState<boolean>(false);
-
   const selectedBook = useMemo(
     () => allBooks.find((b) => b.id === selectedBookId) ?? null,
     [selectedBookId, allBooks]
@@ -98,10 +96,8 @@ export default function BookListPage() {
               <BookCard
                 key={book.id}
                 book={book}
-                // onClick={() => setSelectedBookId(book.id)}
                 onClick={() => {
                   setSelectedBookId(book.id);
-                  setOpenModal(true);
                 }}
               />
             ))}
@@ -109,64 +105,19 @@ export default function BookListPage() {
         )}
       </div>
 
-      {/* Filter Bottom Sheet */}
-      {/* <Sheet open={showFilter} onOpenChange={setShowFilter}>
-        <SheetContent side="bottom" className="max-h-[80vh] overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle>フィルター</SheetTitle>
-          </SheetHeader>
-          <div className="mt-4 space-y-4">
-            <p className="text-sm text-muted-foreground">
-              （ここにFilter UIを実装）
-            </p>
-            <Button onClick={() => setShowFilter(false)}>閉じる</Button>
-          </div>
-        </SheetContent>
-      </Sheet> */}
-
       <FilterBottomSheet
         visible={showFilter}
         filters={filters}
         allLocations={allLocations}
         allPrices={allPrices}
-        // onClose={() => setShowFilter(false)}
         onOpenChange={() => setShowFilter(false)}
         onApply={setFilters}
       />
 
-      {/* Book Detail Modal */}
-      {/* <Dialog
-        open={!!selectedBookId}
-        onOpenChange={() => setSelectedBookId(null)}
-      >
-        <DialogContent className="max-w-md">
-          {selectedBook ? (
-            <>
-              <h2 className="text-lg font-bold">{selectedBook.title}</h2>
-              <p className="text-sm text-muted-foreground mb-3">
-                {selectedBook.author}
-              </p>
-              <Card className="p-3">
-                <p className="text-sm">
-                  場所: {selectedBook.locations.map((l) => l.place).join(", ")}
-                </p>
-                {selectedBook.purchased && (
-                  <Badge className="mt-2 bg-green-500">購入済</Badge>
-                )}
-              </Card>
-            </>
-          ) : (
-            <p>選択中の本がありません</p>
-          )}
-        </DialogContent>
-      </Dialog> */}
-
       <BookDetailModal
-        // visible={selectedBookId !== null}
         visible={selectedBookId !== null}
         book={selectedBook}
         onOpenChange={() => setSelectedBookId(null)}
-        // onOpenChange={setOpenModal}
       />
     </div>
   );
