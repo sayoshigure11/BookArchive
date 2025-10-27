@@ -1,4 +1,5 @@
 // htmlq5Scanerに書き換えた。
+// app/scan/page.tsx
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -21,6 +22,17 @@ export default function ScannerPage() {
   const [scannedBook, setScannedBook] = useState<ScannedBook | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isScanning, setIsScanning] = useState(true);
+
+  // Next.jsのクライアントサイドルーティングでは、DOMの準備が完了する前にuseEffectが実行され、readerRef.currentがnullになる
+  // これを解消するためにDOMが準備されてからカメラのuseEffectを実行させるための処置
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+  useEffect(() => {
+    function mountFunc() {
+      setIsMounted(true);
+    }
+    mountFunc();
+    return () => setIsMounted(false);
+  }, []);
 
   // --- ISBN 検出後処理 ---
   const handleIsbnDetected = async (isbn: string) => {
@@ -54,7 +66,8 @@ export default function ScannerPage() {
   };
 
   useEffect(() => {
-    if (!readerRef.current || !isScanning || scannerRef.current) return;
+    if (!readerRef.current || !isScanning || scannerRef.current || !isMounted)
+      return;
 
     const scanner = new Html5QrcodeScanner(
       "reader",
@@ -82,10 +95,13 @@ export default function ScannerPage() {
     scannerRef.current = scanner;
 
     return () => {
-      scanner.clear().catch(() => {});
+      if (scannerRef.current) {
+        scanner.clear().catch(() => {});
+        scannerRef.current = null;
+      }
     };
     //   }, [isScanning]);
-  }, [isScanning]);
+  }, [isScanning, isMounted]);
 
   // --- モーダルを閉じてスキャン再開 ---
   const handleCloseModal = () => {
