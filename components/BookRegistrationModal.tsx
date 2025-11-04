@@ -31,7 +31,11 @@ type BookLocation = {
 type ScannedBook = {
   isbn: string;
   title: string;
-  author: string;
+  // author: string;
+  author: {
+    kanji: string;
+    yomi: string;
+  }[];
   publisher: string;
   coverImage: string;
 };
@@ -164,7 +168,11 @@ export function BookRegistrationModal({ visible, onClose, bookData }: Props) {
           <div>
             <p className="text-lg font-bold">{bookData.title}</p>
             <p className="text-sm text-muted-foreground">
-              著者: {bookData.author}
+              {/* 著者: {bookData.author} */}
+              著者:{" "}
+              {bookData.author.length > 1
+                ? bookData.author[0].kanji + "ほか"
+                : bookData.author[0].kanji}
             </p>
             <p className="text-sm text-muted-foreground">
               出版社: {bookData.publisher}

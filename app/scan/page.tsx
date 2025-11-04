@@ -5,13 +5,19 @@
 import { useEffect, useRef, useState } from "react";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import { BookRegistrationModal } from "@/components/BookRegistrationModal";
+import { extractName } from "@/lib/extractName";
 
-const kariIsbn = "9784041098721";
+// const kariIsbn = "9784041098721";
+const kariIsbn = "9784408538044";
 
 type ScannedBook = {
   isbn: string;
   title: string;
-  author: string;
+  // author: string;
+  author: {
+    kanji: string;
+    yomi: string;
+  }[];
   publisher: string;
   coverImage: string;
 };
@@ -43,11 +49,19 @@ export default function ScannerPage() {
       const json = await res.json();
 
       if (json.items?.length > 0) {
+        const res1 = await fetch(`https://api.openbd.jp/v1/get?isbn=${isbn}`);
+        const json1 = await res1.json();
+        console.log("json1", json1);
+        const authors = extractName(
+          json1[0].onix.DescriptiveDetail.Contributor
+        );
+
         const info = json.items[0].volumeInfo;
         setScannedBook({
           isbn,
           title: info.title || "不明",
-          author: info.authors?.join(", ") || "不明",
+          // author: info.authors?.join(", ") || "不明",
+          author: authors,
           publisher: info.publisher || "不明",
           coverImage:
             info.imageLinks?.thumbnail ||

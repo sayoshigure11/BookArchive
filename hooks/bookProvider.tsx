@@ -18,7 +18,13 @@ const INITIAL_BOOKS: Book[] = [
     id: "1",
     isbn: "9784167158057",
     title: "ノルウェイの森",
-    author: "村上春樹",
+    // author: "村上春樹",
+    author: [
+      {
+        kanji: "村上春樹",
+        yomi: "ムラカミハルキ",
+      },
+    ],
     publisher: "講談社",
     coverImage:
       "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=450&fit=crop",
@@ -34,7 +40,13 @@ const INITIAL_BOOKS: Book[] = [
     id: "2",
     isbn: "9784087606027",
     title: "火花",
-    author: "又吉直樹",
+    // author: "又吉直樹",
+    author: [
+      {
+        kanji: "又吉直樹",
+        yomi: "マタヨシナオキ",
+      },
+    ],
     publisher: "文藝春秋",
     coverImage:
       "https://images.unsplash.com/photo-1512820790803-83ca734da794?w=300&h=450&fit=crop",
@@ -50,7 +62,12 @@ const INITIAL_BOOKS: Book[] = [
     id: "3",
     isbn: "9784122018273",
     title: "容疑者Xの献身",
-    author: "東野圭吾",
+    author: [
+      {
+        kanji: "東野圭吾",
+        yomi: "ヒガシノ ケイゴ",
+      },
+    ],
     publisher: "文藝春秋",
     coverImage:
       "https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=300&h=450&fit=crop",
@@ -66,7 +83,12 @@ const INITIAL_BOOKS: Book[] = [
     id: "4",
     isbn: "9784103534235",
     title: "三体",
-    author: "劉慈欣",
+    author: [
+      {
+        kanji: "劉慈欣",
+        yomi: "リュウ ジキン",
+      },
+    ],
     publisher: "早川書房",
     coverImage:
       "https://images.unsplash.com/photo-1589998059171-988d887df646?w=300&h=450&fit=crop",
@@ -83,7 +105,12 @@ const INITIAL_BOOKS: Book[] = [
     id: "5",
     isbn: "9784101001623",
     title: "人間失格",
-    author: "太宰治",
+    author: [
+      {
+        kanji: "太宰治",
+        yomi: "ダザイオサム",
+      },
+    ],
     publisher: "新潮社",
     coverImage:
       "https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=300&h=450&fit=crop",
@@ -99,7 +126,12 @@ const INITIAL_BOOKS: Book[] = [
     id: "6",
     isbn: "9784087714784",
     title: "コンビニ人間",
-    author: "村田沙耶香",
+    author: [
+      {
+        kanji: "村田沙耶香",
+        yomi: "ムラタ サヤカ",
+      },
+    ],
     publisher: "文藝春秋",
     coverImage:
       "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=300&h=450&fit=crop",
@@ -147,6 +179,7 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
   const loadBooks = useCallback(async () => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
+      console.log("stored", stored);
       if (stored) {
         setBooks(JSON.parse(stored));
       } else {
@@ -214,7 +247,12 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
       result = result.filter(
         (book) =>
           book.title.toLowerCase().includes(query) ||
-          book.author.toLowerCase().includes(query)
+          // book.author.toLowerCase().includes(query)
+          book.author
+            .map((auth) => auth.kanji)
+            .join(",")
+            .toLowerCase()
+            .includes(query)
       );
     }
 
@@ -244,7 +282,9 @@ export const BookProvider = ({ children }: { children: ReactNode }) => {
         case "title":
           return a.title.localeCompare(b.title);
         case "author":
-          return a.author.localeCompare(b.author);
+          // return a.author.localeCompare(b.author);
+          console.log("a.author", a.author);
+          return a.author[0].yomi.localeCompare(b.author[0].yomi);
         case "expectation":
           return b.expectation - a.expectation;
         case "date":

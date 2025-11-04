@@ -98,7 +98,10 @@ export function BookDetailModal({
             <h3 className="mb-2 text-2xl font-bold leading-tight">
               {book.title}
             </h3>
-            <p className="mb-4 text-sm text-muted-foreground">{book.author}</p>
+            {/* <p className="mb-4 text-sm text-muted-foreground">{book.author}</p> */}
+            <p className="mb-4 text-sm text-muted-foreground">
+              {book.author[0].kanji}
+            </p>
 
             <div className="flex items-center gap-4">
               {book.purchased && (

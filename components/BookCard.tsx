@@ -37,7 +37,8 @@ export function BookCard({ book, onClick }: BookCardProps) {
             {book.title}
           </h3>
           <p className="line-clamp-1 text-sm text-muted-foreground">
-            {book.author}
+            {/* {book.author} */}
+            {book.author[0].kanji}
           </p>
         </div>
 

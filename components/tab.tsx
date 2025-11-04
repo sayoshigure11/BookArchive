@@ -1,6 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { BookOpen, ScanBarcode } from "lucide-react";
+import { BookOpen, ScanBarcode, Search } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 export const Tab = () => {
@@ -22,6 +22,30 @@ export const Tab = () => {
           本棚
         </p>
       </div>
+
+      <div
+        onClick={() => {
+          if (pathName === "/search") return;
+          router.push("/search");
+        }}
+        className="flex-1 flex flex-col items-center justify-center"
+      >
+        <Search
+          className={cn(
+            "w-8 h-8",
+            pathName === "/search" ? "text-orange-200" : ""
+          )}
+        />
+        <p
+          className={cn(
+            "text-xs",
+            pathName === "/search" ? "text-orange-200" : ""
+          )}
+        >
+          検索
+        </p>
+      </div>
+
       <div
         onClick={() => {
           if (pathName === "/scan") return;

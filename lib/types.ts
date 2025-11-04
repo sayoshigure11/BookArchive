@@ -7,7 +7,11 @@ export type Book = {
   id: string;
   isbn: string;
   title: string;
-  author: string;
+  // author: string;
+  author: {
+    kanji: string,
+    yomi:string
+  }[];
   publisher: string;
   coverImage: string;
   expectation: number;
