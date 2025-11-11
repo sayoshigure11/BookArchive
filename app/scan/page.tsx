@@ -1,5 +1,7 @@
 // htmlq5Scanerに書き換えた。
 // app/scan/page.tsx
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -86,25 +88,43 @@ export default function ScannerPage() {
     const scanner = new Html5QrcodeScanner(
       "reader",
       {
-        fps: 20,
-        qrbox: { width: 300, height: 300 },
-        formatsToSupport: [0], // 0 = all formats (QR, CODE_128, EAN, etc.)
+        fps: 10,
+        // qrbox: { width: 250, height: 250 },
+        qrbox: { width: 400, height: 400 },
+        // formatsToSupport: [0], // 0 = all formats (QR, CODE_128, EAN, etc.)
       },
       false
     );
 
-    scanner.render(
-      async (decodedText) => {
-        setIsScanning(false);
-        await handleIsbnDetected(decodedText);
-        scanner.clear();
-        scannerRef.current = null;
-      },
-      (err) => {
-        // スキャンエラー（毎フレーム発生することもあるため無視OK）
-        console.debug("Scan error:", err);
-      }
-    );
+    // scanner.render(
+    //   async (decodedText) => {
+    //     setIsScanning(false);
+    //     await handleIsbnDetected(decodedText);
+    //     scanner.clear();
+    //     scannerRef.current = null;
+    //   },
+    //   (err) => {
+    //     // スキャンエラー（毎フレーム発生することもあるため無視OK）
+    //     console.debug("Scan error:", err);
+    //   }
+    // );
+
+    // スキャンが成功したときの処理
+    async function onScanSuccess(decodedText: string, decodedResult: any) {
+      console.log(`Code matched = ${decodedText}`, decodedResult);
+      setIsScanning(false);
+      await handleIsbnDetected(decodedText);
+      scanner.clear();
+      scannerRef.current = null;
+    }
+    // スキャンが失敗したときの処理
+    function onScanFailure(error: string) {
+      // handle scan failure, usually better to ignore and keep scanning.
+      // for example:
+      console.warn(`Code scan error = ${error}`);
+    }
+
+    scanner.render(onScanSuccess, onScanFailure);
 
     scannerRef.current = scanner;
 
