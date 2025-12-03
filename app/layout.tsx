@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "BookArchive",
   description: "読んだ本と読みたい本を管理するアプリ",
-  manifest: "/manifest.json",
+  // manifest: "/manifest.json",
 
   appleWebApp: {
     capable: true,
@@ -33,9 +33,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ja">
-      <head>
-        <link rel="manifest" href="/manifest.json" />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
